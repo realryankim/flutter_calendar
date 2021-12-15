@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/src/app.dart';
+import 'package:flutter_calendar/src/binding/binding.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -11,12 +13,23 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Calendar',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        primarySwatch: Colors.blue,
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData.dark().copyWith(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          // AppBar title color
+          onSurface: Colors.white,
+          // Selected line and current day dot color
+          secondary: Colors.white,
+        ),
+        appBarTheme: const AppBarTheme(
+          color: Colors.red,
+        ),
       ),
-      home: Container(),
+      initialBinding: Binding(),
+      home: App(),
     );
   }
 }
