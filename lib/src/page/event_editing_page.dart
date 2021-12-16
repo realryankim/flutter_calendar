@@ -35,15 +35,16 @@ class EventEditingPage extends GetView<EventEditingController> {
     );
   }
 
-  Widget buildDateTimePickers() {
+  Widget buildDateTimePickers(BuildContext context) {
     return Column(
       children: [
-        buildFrom(),
+        buildFrom(context),
+        buildTo(context),
       ],
     );
   }
 
-  Widget buildFrom() {
+  Widget buildFrom(BuildContext context) {
     return buildHeader(
       header: 'FROM',
       child: Row(
@@ -51,14 +52,41 @@ class EventEditingPage extends GetView<EventEditingController> {
           Expanded(
             flex: 2,
             child: buildDropdownField(
-              text: Utils.toDate(controller.eventModel.from),
-              onClicked: () {},
+              text: Utils.toDate(controller.eventModel.value.fromDate),
+              onClicked: () =>
+                  controller.pickFromDateTime(context, pickDate: true),
             ),
           ),
           Expanded(
             child: buildDropdownField(
-              text: Utils.toTime(controller.eventModel.from),
-              onClicked: () {},
+              text: Utils.toTime(controller.eventModel.value.fromDate),
+              onClicked: () =>
+                  controller.pickFromDateTime(context, pickDate: false),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTo(BuildContext context) {
+    return buildHeader(
+      header: 'TO',
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: buildDropdownField(
+              text: Utils.toDate(controller.eventModel.value.toDate),
+              onClicked: () =>
+                  controller.pickToDateTime(context, pickDate: true),
+            ),
+          ),
+          Expanded(
+            child: buildDropdownField(
+              text: Utils.toTime(controller.eventModel.value.toDate),
+              onClicked: () =>
+                  controller.pickToDateTime(context, pickDate: false),
             ),
           ),
         ],
@@ -104,13 +132,15 @@ class EventEditingPage extends GetView<EventEditingController> {
         padding: const EdgeInsets.all(12.0),
         child: Form(
           key: controller.formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              buildTitle(),
-              const SizedBox(height: 12),
-              buildDateTimePickers(),
-            ],
+          child: Obx(
+            () => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildTitle(),
+                const SizedBox(height: 12),
+                buildDateTimePickers(context),
+              ],
+            ),
           ),
         ),
       ),

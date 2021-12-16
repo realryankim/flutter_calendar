@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          // AppBar title color
+          surface: Colors.grey[800],
+          // AppBar title color, surface text color
           onSurface: Colors.white,
           // Selected line and current day dot color
           secondary: Colors.white,
