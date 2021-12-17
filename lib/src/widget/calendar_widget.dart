@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/src/controller/event_controller.dart';
+import 'package:flutter_calendar/src/model/event_data_source.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarWidget extends StatelessWidget {
@@ -6,10 +9,16 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SfCalendar(
-      view: CalendarView.month,
-      initialSelectedDate: DateTime.now(),
-      cellBorderColor: Colors.transparent,
+    final events = EventController.to.events;
+    print('build ${events.length}');
+
+    return Obx(
+      () => SfCalendar(
+        view: CalendarView.month,
+        dataSource: EventDataSource(events),
+        initialSelectedDate: DateTime.now(),
+        cellBorderColor: Colors.transparent,
+      ),
     );
   }
 }

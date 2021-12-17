@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar/src/model/event_model.dart';
+import 'package:flutter_calendar/src/controller/event_controller.dart';
+import 'package:flutter_calendar/src/model/event.dart';
 import 'package:get/get.dart';
 
 class EventEditingController extends GetxController {
-  final Rx<EventModel> eventModel = EventModel(
+  final Rx<Event> event = Event(
     title: '',
     description: '',
     fromDate: DateTime.now(),
@@ -11,6 +12,7 @@ class EventEditingController extends GetxController {
       Duration(hours: 2),
     ),
   ).obs;
+
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
 
@@ -26,7 +28,7 @@ class EventEditingController extends GetxController {
       {required bool pickDate}) async {
     final date = await pickDateTime(
       context,
-      eventModel.value.fromDate,
+      event.value.fromDate,
       pickDate: pickDate,
     );
 
@@ -34,35 +36,35 @@ class EventEditingController extends GetxController {
 
     // From 날짜가 To 날짜를 넘으면
 
-    if (date.isAfter(eventModel.value.toDate)) {
-      eventModel(
-        eventModel.value.copyWith(
+    if (date.isAfter(event.value.toDate)) {
+      event(
+        event.value.copyWith(
           toDate: DateTime(
             date.year,
             date.month,
             date.day,
-            eventModel.value.toDate.hour,
-            eventModel.value.toDate.minute,
+            event.value.toDate.hour,
+            event.value.toDate.minute,
           ),
         ),
       );
     }
 
-    eventModel(eventModel.value.copyWith(fromDate: date));
+    event(event.value.copyWith(fromDate: date));
   }
 
   Future pickToDateTime(BuildContext context, {required bool pickDate}) async {
     final date = await pickDateTime(
       context,
-      eventModel.value.toDate,
+      event.value.toDate,
       pickDate: pickDate,
       // from date 이전 날짜는 null로 선택 안되도록
-      firstDate: pickDate ? eventModel.value.fromDate : null,
+      firstDate: pickDate ? event.value.fromDate : null,
     );
 
     if (date == null) return;
 
-    eventModel(eventModel.value.copyWith(toDate: date));
+    event(event.value.copyWith(toDate: date));
   }
 
   Future<DateTime?> pickDateTime(BuildContext context, DateTime initialDate,
@@ -102,6 +104,26 @@ class EventEditingController extends GetxController {
         minutes: timeOfDay.minute,
       );
       return date.add(time);
+    }
+  }
+
+  Future saveForm() async {
+    final isValid = _formKey.currentState!.validate();
+
+    if (isValid) {
+      final saveEvent = event.value.copyWith(
+        title: titleController.text,
+        description: 'Description',
+        fromDate: event.value.fromDate,
+        toDate: event.value.toDate,
+        isAllDay: false,
+      );
+
+      // final eventController = Get.find<EventController>(); // #1
+      final eventController = EventController.to; // #2
+      eventController.addEvent(saveEvent);
+
+      Get.back();
     }
   }
 }

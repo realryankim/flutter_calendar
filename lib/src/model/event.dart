@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class EventModel {
+class Event {
   final String title;
   final String description;
   final DateTime fromDate;
@@ -8,7 +8,7 @@ class EventModel {
   final Color backgroundColor;
   final bool isAllDay;
 
-  const EventModel({
+  const Event({
     required this.title,
     required this.description,
     required this.fromDate,
@@ -18,7 +18,7 @@ class EventModel {
   });
 
   // model의 각 데이터를 업데이트 하기 위한 copyWith 메서드
-  EventModel copyWith({
+  Event copyWith({
     String? title,
     String? description,
     DateTime? fromDate,
@@ -26,7 +26,7 @@ class EventModel {
     Color? backgroundColor,
     bool? isAllDay,
   }) {
-    return EventModel(
+    return Event(
       title: title ?? this.title,
       description: description ?? this.description,
       fromDate: fromDate ?? this.fromDate,

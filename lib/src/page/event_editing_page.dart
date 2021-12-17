@@ -14,7 +14,8 @@ class EventEditingPage extends GetView<EventEditingController> {
           shadowColor: Colors.transparent,
           elevation: 0.0,
         ),
-        onPressed: () {},
+        // once press 'SAVE' button
+        onPressed: controller.saveForm,
         icon: const Icon(Icons.done),
         label: const Text('SAVE'),
       ),
@@ -28,7 +29,8 @@ class EventEditingPage extends GetView<EventEditingController> {
         border: UnderlineInputBorder(),
         hintText: 'Add Title',
       ),
-      onFieldSubmitted: (_) {},
+      // once TextFormField submitted tapping keyboard check
+      onFieldSubmitted: (_) => controller.saveForm,
       validator: (title) =>
           title != null && title.isEmpty ? 'Title cannot be empty' : null,
       controller: controller.titleController,
@@ -52,14 +54,14 @@ class EventEditingPage extends GetView<EventEditingController> {
           Expanded(
             flex: 2,
             child: buildDropdownField(
-              text: Utils.toDate(controller.eventModel.value.fromDate),
+              text: Utils.toDate(controller.event.value.fromDate),
               onClicked: () =>
                   controller.pickFromDateTime(context, pickDate: true),
             ),
           ),
           Expanded(
             child: buildDropdownField(
-              text: Utils.toTime(controller.eventModel.value.fromDate),
+              text: Utils.toTime(controller.event.value.fromDate),
               onClicked: () =>
                   controller.pickFromDateTime(context, pickDate: false),
             ),
@@ -77,14 +79,14 @@ class EventEditingPage extends GetView<EventEditingController> {
           Expanded(
             flex: 2,
             child: buildDropdownField(
-              text: Utils.toDate(controller.eventModel.value.toDate),
+              text: Utils.toDate(controller.event.value.toDate),
               onClicked: () =>
                   controller.pickToDateTime(context, pickDate: true),
             ),
           ),
           Expanded(
             child: buildDropdownField(
-              text: Utils.toTime(controller.eventModel.value.toDate),
+              text: Utils.toTime(controller.event.value.toDate),
               onClicked: () =>
                   controller.pickToDateTime(context, pickDate: false),
             ),
