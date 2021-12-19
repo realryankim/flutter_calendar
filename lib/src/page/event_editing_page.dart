@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar/src/controller/event_editing_controller.dart';
+import 'package:flutter_calendar/src/model/event.dart';
 import 'package:flutter_calendar/src/utils/utils.dart';
 import 'package:get/get.dart';
 
 class EventEditingPage extends GetView<EventEditingController> {
-  const EventEditingPage({Key? key}) : super(key: key);
+  const EventEditingPage({
+    Key? key,
+    this.event,
+  }) : super(key: key);
+
+  final Event? event;
 
   List<Widget> buildEditingActions() {
     return [
@@ -15,7 +21,13 @@ class EventEditingPage extends GetView<EventEditingController> {
           elevation: 0.0,
         ),
         // once press 'SAVE' button
-        onPressed: controller.saveForm,
+        onPressed: () {
+          if (controller.event == null) {
+            controller.saveForm();
+          } else {
+            controller.saveForm(event);
+          }
+        },
         icon: const Icon(Icons.done),
         label: const Text('SAVE'),
       ),
@@ -125,9 +137,18 @@ class EventEditingPage extends GetView<EventEditingController> {
 
   @override
   Widget build(BuildContext context) {
+    if (controller.event == null) {
+      controller.event.value.fromDate = DateTime.now();
+      controller.event.value.toDate = DateTime.now().add(Duration(hours: 2));
+    } else {
+      controller.titleController.text = event!.title;
+      controller.event.value.fromDate = event!.fromDate;
+      controller.event.value.toDate = event!.toDate;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: const CloseButton(),
         actions: buildEditingActions(),
       ),
       body: SingleChildScrollView(
@@ -135,13 +156,19 @@ class EventEditingPage extends GetView<EventEditingController> {
         child: Form(
           key: controller.formKey,
           child: Obx(
-            () => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                buildTitle(),
-                const SizedBox(height: 12),
-                buildDateTimePickers(context),
-              ],
+            () => GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                Get.focusScope!.unfocus();
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  buildTitle(),
+                  const SizedBox(height: 12),
+                  buildDateTimePickers(context),
+                ],
+              ),
             ),
           ),
         ),

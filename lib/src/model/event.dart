@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class Event {
   final String title;
   final String description;
-  final DateTime fromDate;
-  final DateTime toDate;
+  DateTime fromDate;
+  DateTime toDate;
   final Color backgroundColor;
   final bool isAllDay;
 
-  const Event({
+  Event({
     required this.title,
     required this.description,
     required this.fromDate,

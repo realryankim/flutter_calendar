@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar/src/controller/event_controller.dart';
 import 'package:flutter_calendar/src/model/event.dart';
 import 'package:flutter_calendar/src/model/event_data_source.dart';
+import 'package:flutter_calendar/src/page/event_viewing_page.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -14,7 +15,9 @@ class TasksWidget extends StatelessWidget {
     BuildContext context,
     CalendarAppointmentDetails details,
   ) {
-    Event event = details.appointments.first;
+    final Event event = details.appointments.first;
+
+    // print(event.title);
 
     return Container(
       width: details.bounds.width,
@@ -67,7 +70,13 @@ class TasksWidget extends StatelessWidget {
           // color: Colors.red.withOpacity(0.3),
           color: Colors.transparent,
         ),
-        onTap: (details) {},
+        onTap: (details) {
+          if (details.appointments == null) return;
+
+          final Event event = details.appointments!.first;
+
+          Get.to(() => EventViewingPage(event: event));
+        },
       ),
     );
   }

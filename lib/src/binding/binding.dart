@@ -6,5 +6,6 @@ class Binding implements Bindings {
   @override
   void dependencies() {
     Get.put(EventController());
+    Get.put(EventEditingController());
   }
 }

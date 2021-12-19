@@ -4,6 +4,14 @@ import 'package:flutter_calendar/src/model/event.dart';
 import 'package:get/get.dart';
 
 class EventEditingController extends GetxController {
+  static EventEditingController get to => Get.find<EventEditingController>();
+
+  // EventEditingController({
+  //   this.oldEvent,
+  // });
+
+  // final Event? oldEvent;
+
   final Rx<Event> event = Event(
     title: '',
     description: '',
@@ -14,7 +22,7 @@ class EventEditingController extends GetxController {
   ).obs;
 
   final _formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
+  late TextEditingController titleController = TextEditingController();
 
   GlobalKey<FormState> get formKey => _formKey;
 
@@ -35,7 +43,6 @@ class EventEditingController extends GetxController {
     if (date == null) return;
 
     // From 날짜가 To 날짜를 넘으면
-
     if (date.isAfter(event.value.toDate)) {
       event(
         event.value.copyWith(
@@ -107,7 +114,7 @@ class EventEditingController extends GetxController {
     }
   }
 
-  Future saveForm() async {
+  Future saveForm([Event? previousEvent]) async {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
@@ -119,10 +126,22 @@ class EventEditingController extends GetxController {
         isAllDay: false,
       );
 
+      // edit mode
+      final oldTitleData = previousEvent!.title.isEmpty;
+      final oldEvent = previousEvent;
+      final isEditing = oldTitleData == false;
+
       // final eventController = Get.find<EventController>(); // #1
       final eventController = EventController.to; // #2
-      eventController.addEvent(saveEvent);
 
+      if (isEditing) {
+        eventController.editEvent(saveEvent, oldEvent);
+        Get.back();
+      } else {
+        eventController.addEvent(saveEvent);
+      }
+
+      Get.back();
       Get.back();
     }
   }

@@ -20,7 +20,7 @@ class CalendarWidget extends StatelessWidget {
         cellBorderColor: Colors.transparent,
         onLongPress: (details) {
           final eventController = EventController.to;
-          print(details.date);
+          // print(details.date);
           eventController.setDate(details.date!);
           Get.bottomSheet(TasksWidget());
         },
