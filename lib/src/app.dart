@@ -3,6 +3,7 @@ import 'package:flutter_calendar/src/controller/event_controller.dart';
 import 'package:flutter_calendar/src/controller/event_editing_controller.dart';
 import 'package:flutter_calendar/src/model/event.dart';
 import 'package:flutter_calendar/src/page/event_editing_page.dart';
+import 'package:flutter_calendar/src/utils/utils.dart';
 import 'package:flutter_calendar/src/widget/calendar_widget.dart';
 import 'package:get/get.dart';
 
@@ -11,25 +12,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Event event = EventEditingController.to.event.value;
-
     return Scaffold(
       appBar: AppBar(
-        // title: Text(MyApp.title),
-        title: Text('Calendar Events App'),
+        title: Text(Utils.title),
         centerTitle: true,
       ),
       body: CalendarWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(
-              () => EventEditingPage(
-                    event: event,
-                  ), binding: BindingsBuilder(() {
+          Get.to(() => EventEditingPage(), binding: BindingsBuilder(() {
             Get.lazyPut(() => EventEditingController());
           }));
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),

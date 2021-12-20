@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/src/controller/event_controller.dart';
 import 'package:flutter_calendar/src/controller/event_editing_controller.dart';
 import 'package:flutter_calendar/src/model/event.dart';
 import 'package:flutter_calendar/src/utils/utils.dart';
@@ -20,9 +21,8 @@ class EventEditingPage extends GetView<EventEditingController> {
           shadowColor: Colors.transparent,
           elevation: 0.0,
         ),
-        // once press 'SAVE' button
         onPressed: () {
-          if (controller.event == null) {
+          if (event == null) {
             controller.saveForm();
           } else {
             controller.saveForm(event);
@@ -36,12 +36,12 @@ class EventEditingPage extends GetView<EventEditingController> {
 
   Widget buildTitle() {
     return TextFormField(
-      style: TextStyle(fontSize: 24.0),
+      style: const TextStyle(fontSize: 24.0),
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         hintText: 'Add Title',
       ),
-      // once TextFormField submitted tapping keyboard check
+      // 타이틀을 입력하고, 키보드에서 체크를 눌러도, 이벤트 저장
       onFieldSubmitted: (_) => controller.saveForm,
       validator: (title) =>
           title != null && title.isEmpty ? 'Title cannot be empty' : null,
@@ -61,24 +61,26 @@ class EventEditingPage extends GetView<EventEditingController> {
   Widget buildFrom(BuildContext context) {
     return buildHeader(
       header: 'FROM',
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: buildDropdownField(
-              text: Utils.toDate(controller.event.value.fromDate),
-              onClicked: () =>
-                  controller.pickFromDateTime(context, pickDate: true),
+      child: Obx(
+        () => Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: buildDropdownField(
+                text: Utils.toDate(controller.event.value.fromDate),
+                onClicked: () =>
+                    controller.pickFromDateTime(context, pickDate: true),
+              ),
             ),
-          ),
-          Expanded(
-            child: buildDropdownField(
-              text: Utils.toTime(controller.event.value.fromDate),
-              onClicked: () =>
-                  controller.pickFromDateTime(context, pickDate: false),
+            Expanded(
+              child: buildDropdownField(
+                text: Utils.toTime(controller.event.value.fromDate),
+                onClicked: () =>
+                    controller.pickFromDateTime(context, pickDate: false),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -128,7 +130,7 @@ class EventEditingPage extends GetView<EventEditingController> {
       children: [
         Text(
           header,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         child,
       ],
@@ -137,9 +139,11 @@ class EventEditingPage extends GetView<EventEditingController> {
 
   @override
   Widget build(BuildContext context) {
-    if (controller.event == null) {
+    if (event == null) {
+      controller.titleController.text = '';
       controller.event.value.fromDate = DateTime.now();
-      controller.event.value.toDate = DateTime.now().add(Duration(hours: 2));
+      controller.event.value.toDate =
+          DateTime.now().add(const Duration(hours: 2));
     } else {
       controller.titleController.text = event!.title;
       controller.event.value.fromDate = event!.fromDate;
@@ -167,6 +171,9 @@ class EventEditingPage extends GetView<EventEditingController> {
                   buildTitle(),
                   const SizedBox(height: 12),
                   buildDateTimePickers(context),
+
+                  // TODO: Add All Day Event checkbox
+                  // TODO: Add Event Details TextField
                 ],
               ),
             ),

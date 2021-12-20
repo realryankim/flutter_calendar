@@ -19,16 +19,12 @@ class EventController extends GetxController {
     _events.add(event);
   }
 
-  // #
   void deleteEvent(Event event) {
     _events.remove(event);
   }
 
   void editEvent(Event newEvent, Event oldEvent) {
     final index = _events.indexOf(oldEvent);
-    print(newEvent.title);
-    print(oldEvent.title);
-    print(index);
     _events[index] = newEvent;
   }
 }

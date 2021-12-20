@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/src/app.dart';
+import 'package:flutter_calendar/src/controller/event_controller.dart';
 import 'package:flutter_calendar/src/controller/event_editing_controller.dart';
 import 'package:flutter_calendar/src/model/event.dart';
 import 'package:flutter_calendar/src/page/event_editing_page.dart';
@@ -26,7 +28,12 @@ class EventViewingPage extends StatelessWidget {
       ),
       IconButton(
         icon: const Icon(Icons.delete),
-        onPressed: () {},
+        onPressed: () {
+          final eventController = EventController.to;
+
+          eventController.deleteEvent(event);
+          Get.offAll(() => App());
+        },
       ),
     ];
   }
@@ -46,7 +53,7 @@ class EventViewingPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
           Text("${Utils.toDate(date)} ${Utils.toTime(date)}"),
         ],
       ),
@@ -57,25 +64,25 @@ class EventViewingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: const CloseButton(),
         actions: buildViewingActions(context, event),
       ),
       body: ListView(
         padding: const EdgeInsets.all(32),
         children: [
           buildDateTime(event),
-          SizedBox(height: 32.0),
+          const SizedBox(height: 32.0),
           Text(
             event.title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 22.0,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 24.0),
+          const SizedBox(height: 24.0),
           Text(
             event.description,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16.0,
             ),

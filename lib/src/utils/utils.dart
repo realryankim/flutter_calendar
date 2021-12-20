@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 
 class Utils {
+  static String title = 'Calendar Events App';
+
   static String toDateTime(DateTime dateTime) {
     final date = DateFormat.yMMMEd().format(dateTime);
     final time = DateFormat.Hm().format(dateTime);

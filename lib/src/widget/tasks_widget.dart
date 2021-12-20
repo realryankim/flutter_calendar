@@ -10,14 +10,12 @@ import 'package:syncfusion_flutter_core/theme.dart';
 class TasksWidget extends StatelessWidget {
   const TasksWidget({Key? key}) : super(key: key);
 
-  // timeline event 영역 디테일
+  // 타임라인 이벤트 영역 UI
   Widget appintmentBuilder(
     BuildContext context,
     CalendarAppointmentDetails details,
   ) {
     final Event event = details.appointments.first;
-
-    // print(event.title);
 
     return Container(
       width: details.bounds.width,
@@ -50,7 +48,7 @@ class TasksWidget extends StatelessWidget {
       return const Center(
         child: Text(
           "No Events found!",
-          style: TextStyle(color: Colors.black, fontSize: 24.0),
+          style: TextStyle(color: Colors.white, fontSize: 24.0),
         ),
       );
     }
@@ -73,7 +71,7 @@ class TasksWidget extends StatelessWidget {
         onTap: (details) {
           if (details.appointments == null) return;
 
-          final Event event = details.appointments!.first;
+          final event = details.appointments!.first;
 
           Get.to(() => EventViewingPage(event: event));
         },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/src/app.dart';
 import 'package:flutter_calendar/src/controller/event_controller.dart';
 import 'package:flutter_calendar/src/model/event.dart';
 import 'package:get/get.dart';
@@ -6,18 +7,13 @@ import 'package:get/get.dart';
 class EventEditingController extends GetxController {
   static EventEditingController get to => Get.find<EventEditingController>();
 
-  // EventEditingController({
-  //   this.oldEvent,
-  // });
-
-  // final Event? oldEvent;
-
-  final Rx<Event> event = Event(
+  // Event 반응형으로 초기화
+  Rx<Event> event = Event(
     title: '',
     description: '',
     fromDate: DateTime.now(),
     toDate: DateTime.now().add(
-      Duration(hours: 2),
+      const Duration(hours: 2),
     ),
   ).obs;
 
@@ -42,7 +38,7 @@ class EventEditingController extends GetxController {
 
     if (date == null) return;
 
-    // From 날짜가 To 날짜를 넘으면
+    // fromDate를 toDate 넘는 날짜를 선택하면 toDate을 변경
     if (date.isAfter(event.value.toDate)) {
       event(
         event.value.copyWith(
@@ -50,13 +46,14 @@ class EventEditingController extends GetxController {
             date.year,
             date.month,
             date.day,
-            event.value.toDate.hour,
-            event.value.toDate.minute,
+            date.hour,
+            date.minute,
           ),
         ),
       );
     }
 
+    // event.value.fromDate = date; ❌
     event(event.value.copyWith(fromDate: date));
   }
 
@@ -65,23 +62,24 @@ class EventEditingController extends GetxController {
       context,
       event.value.toDate,
       pickDate: pickDate,
-      // from date 이전 날짜는 null로 선택 안되도록
+      // firstDate: from date 이전 날짜들은 null로 할당해서 선택 안되도록
       firstDate: pickDate ? event.value.fromDate : null,
     );
 
     if (date == null) return;
 
+    // event.value.toDate = date; ❌
     event(event.value.copyWith(toDate: date));
   }
 
   Future<DateTime?> pickDateTime(BuildContext context, DateTime initialDate,
       {required bool pickDate, DateTime? firstDate}) async {
-    // date
+    // DatePicker
     if (pickDate) {
       final date = await showDatePicker(
         context: context,
         initialDate: initialDate,
-        // 날짜 시작
+        // 날짜 시작, 끝의 범위 제한
         firstDate: firstDate ?? DateTime(2015, 8),
         lastDate: DateTime(2101),
       );
@@ -95,7 +93,7 @@ class EventEditingController extends GetxController {
 
       return date.add(time);
     } else {
-      // time
+      // TimePicker
       final timeOfDay = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(initialDate),
@@ -114,6 +112,7 @@ class EventEditingController extends GetxController {
     }
   }
 
+  // 이벤트 저장
   Future saveForm([Event? previousEvent]) async {
     final isValid = _formKey.currentState!.validate();
 
@@ -127,21 +126,19 @@ class EventEditingController extends GetxController {
       );
 
       // edit mode
-      final oldTitleData = previousEvent!.title.isEmpty;
       final oldEvent = previousEvent;
-      final isEditing = oldTitleData == false;
+      final isEditing = oldEvent != null;
 
       // final eventController = Get.find<EventController>(); // #1
       final eventController = EventController.to; // #2
 
       if (isEditing) {
-        eventController.editEvent(saveEvent, oldEvent);
-        Get.back();
+        eventController.editEvent(saveEvent, oldEvent!);
+        Get.offAll(() => App());
       } else {
         eventController.addEvent(saveEvent);
+        Get.offAll(() => App());
       }
-
-      Get.back();
       Get.back();
     }
   }
