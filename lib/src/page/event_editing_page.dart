@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar/src/controller/event_controller.dart';
 import 'package:flutter_calendar/src/controller/event_editing_controller.dart';
 import 'package:flutter_calendar/src/model/event.dart';
 import 'package:flutter_calendar/src/utils/utils.dart';
@@ -11,6 +10,7 @@ class EventEditingPage extends GetView<EventEditingController> {
     this.event,
   }) : super(key: key);
 
+  // 이벤트를 수정할 때, 넘어오는 기존 이벤트 데이터
   final Event? event;
 
   List<Widget> buildEditingActions() {
@@ -23,8 +23,10 @@ class EventEditingPage extends GetView<EventEditingController> {
         ),
         onPressed: () {
           if (event == null) {
+            // 이벤트 저장
             controller.saveForm();
           } else {
+            // 이벤트 수정, 저장
             controller.saveForm(event);
           }
         },
@@ -37,12 +39,12 @@ class EventEditingPage extends GetView<EventEditingController> {
   Widget buildTitle() {
     return TextFormField(
       style: const TextStyle(fontSize: 24.0),
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: UnderlineInputBorder(),
         hintText: 'Add Title',
       ),
-      // 타이틀을 입력하고, 키보드에서 체크를 눌러도, 이벤트 저장
-      onFieldSubmitted: (_) => controller.saveForm,
+      // 타이틀을 입력하고, 키보드에서 체크를 눌러도, 이벤트 저장 실행
+      onFieldSubmitted: (_) => controller.saveForm(),
       validator: (title) =>
           title != null && title.isEmpty ? 'Title cannot be empty' : null,
       controller: controller.titleController,

@@ -38,7 +38,7 @@ class EventEditingController extends GetxController {
 
     if (date == null) return;
 
-    // fromDate를 toDate 넘는 날짜를 선택하면 toDate을 변경
+    // 역할: fromDate를 toDate 넘는 날짜를 선택하면 toDate을 fromDate와 같은 날짜와 +2시간으로 변경
     if (date.isAfter(event.value.toDate)) {
       event(
         event.value.copyWith(
@@ -46,7 +46,7 @@ class EventEditingController extends GetxController {
             date.year,
             date.month,
             date.day,
-            date.hour,
+            date.hour + 2,
             date.minute,
           ),
         ),
@@ -62,7 +62,7 @@ class EventEditingController extends GetxController {
       context,
       event.value.toDate,
       pickDate: pickDate,
-      // firstDate: from date 이전 날짜들은 null로 할당해서 선택 안되도록
+      // firstDate 역할: from date 이전 날짜들은 null로 할당해서 선택 안되도록
       firstDate: pickDate ? event.value.fromDate : null,
     );
 
@@ -125,7 +125,7 @@ class EventEditingController extends GetxController {
         isAllDay: false,
       );
 
-      // edit mode
+      // oldEvent 역할: 이전 이벤트를 할당해서, 이벤트를 수정하고, 저장하는데 사용
       final oldEvent = previousEvent;
       final isEditing = oldEvent != null;
 
@@ -134,10 +134,10 @@ class EventEditingController extends GetxController {
 
       if (isEditing) {
         eventController.editEvent(saveEvent, oldEvent!);
-        Get.offAll(() => App());
+        Get.offAll(() => const App());
       } else {
         eventController.addEvent(saveEvent);
-        Get.offAll(() => App());
+        Get.offAll(() => const App());
       }
       Get.back();
     }

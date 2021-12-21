@@ -10,7 +10,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 class TasksWidget extends StatelessWidget {
   const TasksWidget({Key? key}) : super(key: key);
 
-  // 타임라인 이벤트 영역 UI
+  // 추가된 이벤트 UI
   Widget appintmentBuilder(
     BuildContext context,
     CalendarAppointmentDetails details,
