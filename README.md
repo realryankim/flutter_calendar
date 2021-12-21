@@ -1,16 +1,22 @@
-# flutter_calendar
+# Flutter Calendar
 
-A new Flutter project.
+플러터 달력
 
-## Getting Started
+## Features
+- 달력 이벤트 추가, 수정, 삭제
 
-This project is a starting point for a Flutter application.
+## Screenshots
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/27044221/146900304-9123b864-bb51-40e9-b2b3-995b19bb0b8a.gif?raw=true" alt="Add Event" width="250">
+  <img src="https://user-images.githubusercontent.com/27044221/146900322-7cf5c6d3-1bc5-420d-b7c5-4705bbe40ae7.gif?raw=true" alt="Edit and Delete Event" width="250">
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+## Dependencies
+- [Flutter](https://flutter.dev/)
+- [Get](https://pub.dev/packages/get)
+- [Intl](https://pub.dev/packages/intl)
+- [Syncfusion_Flutter Calendar](https://pub.dev/packages/syncfusion_flutter_calendar)
+- [Syncfusion Flutter Core](https://pub.dev/packages/syncfusion_flutter_core)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This app based on a tutorial by -
+[Johannes Milke](https://www.youtube.com/watch?v=LoDtxRkGDTw)
